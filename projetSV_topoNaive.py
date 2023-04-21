@@ -154,8 +154,8 @@ def U_n(i,n):
 
     b_i = -g * mat_h[n][i] * (fond_constant(i+1) - fond_constant(i))/delta_x
     
-    h_final = mat_h[n][i] - (delta_t/delta_x) * (F_2[0] - F_1[0]) + delta_t * b_i
-    q_final = mat_q[n][i] - (delta_t/delta_x) * (F_2[1] - F_1[1]) 
+    h_final = mat_h[n][i] - (delta_t/delta_x) * (F_2[0] - F_1[0]) 
+    q_final = mat_q[n][i] - (delta_t/delta_x) * (F_2[1] - F_1[1]) + delta_t * b_i
     
     mat_h[n+1][i] = h_final
     mat_q[n+1][i] = q_final
@@ -178,9 +178,11 @@ def main():
             U_n(i,n)
     
     #Affichage de l'état a la position finale
-    
     for n in range(0,TPS_FINAL,10):
         plt.plot(x_i,mat_h[n])
+
+    fond = [fond_constant(x) for x in x_i]
+    plt.plot(x_i,fond)
     plt.show()
     return 
 
