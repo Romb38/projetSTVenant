@@ -13,7 +13,6 @@ import scipy.signal as sps
 
 """
 Constantes informatiques
-
 Le nombre de maille de notre projet correspond a LARGEUR * TPS_FIN
 """
 
@@ -92,11 +91,16 @@ def etat_initial_bords():
 def fond_constant(x):
     """
     Fonction de topographie CONSTANT AU COURS DU TEMPS
-
-
     Fonction test
     """
-    return np.cos(1/20*x)/14 + 1.8
+    if x<=5:
+        return 1.5
+    elif x>5 and x<10:
+        return (-1/10)*x + 2
+    else:
+        return 1
+
+    #return np.cos(1/20*x)/14 + 1.8
         
 
 """
@@ -152,11 +156,10 @@ def U_n(i,n):
     F_1 = solveur_Rusanov(U_i1,U_i)
     F_2 = solveur_Rusanov(U_i,U_i2)
 
-    b_i = -g * mat_h[n][i] * (fond_constant(i+1) - fond_constant(i))/delta_x
+    b_i = g * (fond_constant(i+1) - fond_constant(i))/delta_x 
     
     h_final = mat_h[n][i] - (delta_t/delta_x) * (F_2[0] - F_1[0]) 
     q_final = mat_q[n][i] - (delta_t/delta_x) * (F_2[1] - F_1[1]) + delta_t * b_i
-    
     mat_h[n+1][i] = h_final
     mat_q[n+1][i] = q_final
     
@@ -181,9 +184,13 @@ def main():
     for n in range(0,TPS_FINAL,10):
         plt.plot(x_i,mat_h[n])
 
-    fond = [fond_constant(x) for x in x_i]
-    plt.plot(x_i,fond)
-    plt.show()
+        #====Indente : 1 par 1 =====
+        #CHOIX
+        #Desindente : tous d'un coup
+        fond = [fond_constant(x) for x in x_i]
+        plt.plot(x_i,fond)
+        plt.show()
+        #================
     return 
 
 
