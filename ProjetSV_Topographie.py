@@ -13,7 +13,6 @@ import scipy.signal as sps
 
 """
 Constantes informatiques
-
 Le nombre de maille de notre projet correspond a LARGEUR * TPS_FIN
 """
 
@@ -64,11 +63,16 @@ def loi_normale(mu,sgm,x):
 def fond_constant(x):
     """
     Fonction de topographie CONSTANT AU COURS DU TEMPS
-
-
     Fonction test
     """
-    return np.cos(1/20*x)/14 + 1.8
+    if x<=5:
+        return 1.5
+    elif x>5 and x<10:
+        return (-1/10)*x + 2
+    else:
+        return 1
+
+    #return np.cos(1/20*x)/14 + 1.8
 
 def h_initial(x):
     """
@@ -197,9 +201,13 @@ def main():
     for n in range(0,TPS_FINAL,10):
         plt.plot(x_i,mat_h[n])
 
-    fond = [fond_constant(i) for i in range (0,LARGEUR)]
-    plt.plot(x_i,fond)
-    plt.show()
+        #====Indente : 1 par 1 =====
+        #CHOIX
+        #Desindente : tous d'un coup
+        fond = [fond_constant(i) for i in range (0,LARGEUR)]
+        plt.plot(x_i,fond)
+        plt.show()
+        #================
     return 
 
 
