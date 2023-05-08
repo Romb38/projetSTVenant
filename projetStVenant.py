@@ -33,8 +33,9 @@ Les x_i sont les colones
 Les t_n sont les lignes
 """
 
-mat_h = [[0 for i in range(LARGEUR)] for i in range (TPS_FINAL)]
-mat_q = [[1 for i in range(LARGEUR)] for i in range (TPS_FINAL)]
+#mat_h = [[0 for i in range(LARGEUR)] for i in range (TPS_FINAL)]
+mat_h = []
+mat_q = []
 
 """
 Définition de la grille d'étude
@@ -48,6 +49,11 @@ t_n = [ (i/TPS_FINAL) for i in range(0,TPS_FINAL)]
 delta_x = 1
 delta_t = 0.1
 
+
+"""
+Condition CFL
+"""
+CFL = [0]
 
 """
 Mise en place des condition initiales
@@ -88,6 +94,16 @@ def etat_initial_bords():
         mat_h[n][LARGEUR-1] = HAUTEUR_INITIALE
     return
         
+def ajout_ligne():
+    """
+    Ajoute une ligne a la matrice des hauteurs
+    """
+    mat_h.append([0 for i in range(LARGEUR)])
+    mat_h[-1][0] = HAUTEUR_INITIALE
+    mat_h[-1][LARGEUR-1] = HAUTEUR_INITIALE
+
+    mat_q.append([1 for i in range(LARGEUR)])
+    return
 
 """
 Fonctions de calculs
@@ -121,6 +137,7 @@ def solveur_Rusanov(Ug,Ud):
     c_2 = abs(u_d) + np.sqrt(g*h_d)
     
     c = max(c_1,c_2)
+    CFL[0] = c
     
     #Calcul du résultat voulu
     a_1 = (F(Ug)[0] + F(Ud)[0])/2 - c*(Ud[0]-Ug[0])/2
@@ -152,8 +169,10 @@ def U_n(i,n):
     
 def main():
     
+    ajout_ligne()
+
     #Mise en place des bords constants
-    etat_initial_bords()
+    #etat_initial_bords()
     
     #Initialisation de la hauteur
     for i in range(1,LARGEUR-1):
@@ -161,14 +180,19 @@ def main():
         mat_q[0][i] = h_initial(i) * u_inital(i)
     
     #Calcul des U_n pour toutes les positions/tous les temps
-    for n in range (0,TPS_FINAL-1):
+    t = 0
+    n = 0
+    while t < TPS_FINAL:
+        t += CFL[0]
+        ajout_ligne()
         for i in range(1,LARGEUR-1):
             U_n(i,n)
+        n += 1
     
     #Affichage de l'état a la position finale
     
-    for n in range(0,TPS_FINAL,10):
-        plt.plot(x_i,mat_h[n])
+    for k in range(0,n,10):
+        plt.plot(x_i,mat_h[k])
     plt.show()
     return 
 

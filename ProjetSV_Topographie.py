@@ -204,9 +204,9 @@ def main():
         #====Indente : 1 par 1 =====
         #CHOIX
         #Desindente : tous d'un coup
-        fond = [fond_constant(i) for i in range (0,LARGEUR)]
-        plt.plot(x_i,fond)
-        plt.show()
+    fond = [fond_constant(i) for i in range (0,LARGEUR)]
+    plt.plot(x_i,fond)
+    plt.show()
         #================
     return 
 
