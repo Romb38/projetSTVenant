@@ -8,8 +8,6 @@ Notes :
 
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.signal as sps
-#import copy as cp
 
 """
 Constantes informatiques
@@ -52,7 +50,7 @@ delta_t = 0.1
 """
 Condition CFL
 """
-CFL = [0]
+CFL = [1]
 
 """
 Mise en place des condition initiales
@@ -82,7 +80,7 @@ def u_inital(x):
     
     Fonction test
     """
-    return 0.5
+    return 0.4
 
 def etat_initial_bords():
     """
@@ -97,9 +95,15 @@ def ajout_ligne():
     """
     Ajoute une ligne a la matrice des hauteurs
     """
+
     mat_h.append([0 for i in range(LARGEUR)])
-    mat_h[-1][0] = HAUTEUR_INITIALE
-    mat_h[-1][LARGEUR-1] = HAUTEUR_INITIALE
+    if len(mat_h) <= 2:
+        mat_h[-1][0] = HAUTEUR_INITIALE
+        mat_h[-1][LARGEUR-1] = HAUTEUR_INITIALE
+    else:
+        mat_h[-1][0] = mat_h[-2][0]
+        mat_h[-1][LARGEUR-1] = mat_h[-2][-1]
+    
 
     mat_q.append([1 for i in range(LARGEUR)])
     return
@@ -136,6 +140,7 @@ def solveur_Rusanov(Ug,Ud):
     c_2 = abs(u_d) + np.sqrt(g*h_d)
     
     c = max(c_1,c_2)
+
     CFL[0] = c #Condition CFL
     
     #Calcul du résultat voulu
