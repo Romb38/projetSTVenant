@@ -71,12 +71,14 @@ def fond_constant(x):
     Fonction de topographie CONSTANT AU COURS DU TEMPS
     Fonction test
     """
-    if x<=5:
-        return 1.5
-    elif x>5 and x<10:
-        return (-1/10)*x + 2
-    else:
-        return 1
+    # if x<=5:
+    #     return 1.5
+    # elif x>5 and x<10:
+    #     return (-1/10)*x + 2
+    # else:
+    #     return 1
+    
+    return loi_normale(50,4,x)
 
     #return np.cos(1/20*x)/14 + 1.8
 
@@ -86,7 +88,7 @@ def h_initial(x):
     
     Fonction test
     """
-    return loi_normale(50,4,x) + HAUTEUR_INITIALE
+    return HAUTEUR_INITIALE #+ loi_normale(50,4,x)
 
 
 def u_inital(x):
@@ -199,6 +201,28 @@ def U_n(i,n):
     
     return
     
+
+def max_hauteur(mat_h):
+    """
+    Pour un lac au repos (donc plat), un fond symétrique et les bords qui sont relié
+    On calcule la différence entre la hauteur initiale et la hauteur calculée pour voir si ca ne bouge pas
+    """
+
+    max_hauteur = []
+    for temps in mat_h:
+        diff_hauteur = []
+        for hauteur in temps:
+            diff_hauteur.append(abs(hauteur - HAUTEUR_INITIALE))
+
+        max_hauteur.append(max(diff_hauteur))
+    
+
+    #max_hauteur contient la différence maximum a chaque pas de temps entre la constante réelle et la hauteur calculée
+    return max_hauteur
+
+
+
+
 def main():
     
     ajout_ligne()
@@ -233,10 +257,13 @@ def main():
         #====Indente : 1 par 1 =====
         #CHOIX
         #Desindente : tous d'un coup
-        fond = [fond_constant(i) for i in range (0,LARGEUR)]
-        plt.plot(x_i,fond)
-        plt.show()
+    fond = [fond_constant(i) for i in range (0,LARGEUR)]
+    plt.plot(x_i,fond)
+    plt.show()
         #================
+
+    print("Tableau des différénces de hauteurs :")
+    print(max_hauteur(mat_h))
     return 
 
 
