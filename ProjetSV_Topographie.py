@@ -95,7 +95,7 @@ def u_inital(x):
     
     Fonction test
     """
-    return 0.5
+    return 0
 
 def etat_initial_bords():
     """
@@ -216,6 +216,13 @@ def main():
         ajout_ligne()
         for i in range(1,LARGEUR-1):
             U_n(i,n)
+            
+            #Eviter les effets de bords (symétrisations = effet tore)
+            mat_h[n+1][0] = mat_h[n][LARGEUR-2]
+            mat_h[n+1][LARGEUR-1] = mat_h[n][1]
+            
+            mat_q[n+1][0] = mat_q[n][LARGEUR-2]
+            mat_q[n+1][LARGEUR-1] = mat_q[n][1]
         n += 1 #Le tableau s'est agrandi de 1
     
     #Affichage de l'état a la position finale
@@ -226,9 +233,9 @@ def main():
         #====Indente : 1 par 1 =====
         #CHOIX
         #Desindente : tous d'un coup
-    fond = [fond_constant(i) for i in range (0,LARGEUR)]
-    plt.plot(x_i,fond)
-    plt.show()
+        fond = [fond_constant(i) for i in range (0,LARGEUR)]
+        plt.plot(x_i,fond)
+        plt.show()
         #================
     return 
 
